@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>制鞋工三级·题库速记</title>
+<script src="questions.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--main:#7B93A4;--main-d:#617888;--main-l:#D6DEE4;--bg:#F2F5F7;--card:#FFFFFF;--text:#2C3E50;--sub:#7F8C8D;--ok:#52c41a;--err:#e74c3c;--shadow:0 2px 12px rgba(123,147,164,.15);--radius:14px}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;overscroll-behavior-y:contain}
+button{border:none;outline:none;font-family:inherit;cursor:pointer}
+.app{max-width:640px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.hidden{display:none!important}
+
+/* ===== 首页 ===== */
+#home-view{padding:16px 16px 80px}
+.logo{text-align:center;padding:28px 0 20px}
+.logo .ic{width:64px;height:64px;margin:0 auto 12px;background:var(--main);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 4px 16px rgba(123,147,164,.4)}
+.logo h1{font-size:20px;font-weight:700;letter-spacing:.5px}
+.logo .sub{font-size:12px;color:var(--sub);margin-top:4px}
+.stats-card{background:var(--card);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;justify-content:space-around}
+.stats-card .si{text-align:center}
+.stats-card .si .num{font-size:22px;font-weight:700;color:var(--main)}
+.stats-card .si .lbl{font-size:11px;color:var(--sub);margin-top:2px}
+
+.section-title{font-size:13px;color:var(--sub);margin:0 4px 8px;font-weight:600}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.mode-card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);text-align:left;transition:transform .15s}
+.mode-card:active{transform:scale(.97)}
+.mode-card .ico{font-size:26px;margin-bottom:8px}
+.mode-card .tt{font-size:15px;font-weight:600;margin-bottom:2px}
+.mode-card .ds{font-size:11px;color:var(--sub)}
+
+.module-list{background:var(--card);border-radius:var(--radius);padding:8px 4px;box-shadow:var(--shadow)}
+.module-item{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--main-l)}
+.module-item:last-child{border-bottom:none}
+.module-item .dot{width:8px;height:8px;border-radius:50%;background:var(--main);margin-right:12px;flex-shrink:0}
+.module-item .mn{font-size:14px;flex:1}
+.module-item .mc{font-size:12px;color:var(--sub);background:var(--bg);padding:2px 10px;border-radius:10px}
+.module-item:active{background:var(--bg)}
+
+/* ===== 答题视图 ===== */
+#quiz-view{display:none;flex:1;flex-direction:column;min-height:100vh}
+.qheader{background:var(--card);padding:12px 16px;box-shadow:var(--shadow);position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px}
+.qheader .back{font-size:20px;color:var(--main);padding:4px}
+.qheader .progress{flex:1;height:6px;background:var(--main-l);border-radius:3px;overflow:hidden}
+.qheader .progress .bar{height:100%;background:var(--main);transition:width .3s;border-radius:3px}
+.qheader .cnt{font-size:13px;color:var(--sub);font-weight:600;min-width:54px;text-align:right}
+.qheader .cnt b{color:var(--main)}
+
+.qbody{flex:1;padding:16px;overflow-y:auto}
+.qtag{display:inline-block;font-size:11px;color:var(--main);background:var(--main-l);padding:2px 10px;border-radius:10px;margin-bottom:10px}
+.qtag .m{margin-left:6px;color:var(--sub)}
+.qtext{font-size:17px;line-height:1.65;margin-bottom:20px;font-weight:500}
+
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{background:var(--card);border:2px solid var(--main-l);border-radius:12px;padding:14px 16px;font-size:15px;display:flex;align-items:center;gap:12px;transition:all .2s}
+.opt:active{transform:scale(.98)}
+.opt .ltr{width:28px;height:28px;border-radius:50%;border:2px solid var(--main-l);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--sub);flex-shrink:0}
+.opt.selected{border-color:var(--main);background:var(--main-l)}
+.opt.selected .ltr{border-color:var(--main);background:var(--main);color:#fff}
+.opt.correct{border-color:var(--ok);background:#f0fff0}
+.opt.correct .ltr{border-color:var(--ok);background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--err);background:#fff0f0}
+.opt.wrong .ltr{border-color:var(--err);background:var(--err);color:#fff}
+
+.tf-row{display:flex;gap:12px}
+.tf-btn{flex:1;background:var(--card);border:2px solid var(--main-l);border-radius:12px;padding:20px;text-align:center;font-size:17px;font-weight:600;transition:all .2s}
+.tf-btn:active{transform:scale(.97)}
+.tf-btn .ico{display:block;font-size:30px;margin-bottom:4px}
+.tf-btn.selected{border-color:var(--main);background:var(--main-l)}
+.tf-btn.correct{border-color:var(--ok);background:#f0fff0;color:var(--ok)}
+.tf-btn.wrong{border-color:var(--err);background:#fff0f0;color:var(--err)}
+
+/* 解释卡 */
+.explain{margin-top:16px;background:var(--card);border-radius:12px;padding:14px 16px;border-left:4px solid var(--main);box-shadow:var(--shadow);animation:fadein .3s}
+.explain .ans-line{font-size:14px;color:var(--sub);margin-bottom:6px}
+.explain .ans-line b{color:var(--main);font-size:16px}
+.explain .tip{font-size:13px;color:var(--text);background:var(--bg);padding:10px 12px;border-radius:8px;margin-top:8px}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* 底部操作栏 */
+.qfooter{background:var(--card);padding:12px 16px;box-shadow:0 -2px 12px rgba(0,0,0,.06);display:flex;gap:10px}
+.qfooter button{flex:1;padding:13px;border-radius:10px;font-size:14px;font-weight:600}
+.btn-main{background:var(--main);color:#fff}
+.btn-ghost{background:var(--bg);color:var(--main)}
+.btn-main:active{background:var(--main-d)}
+
+/* ===== 结果页 ===== */
+#result-view{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;text-align:center}
+#result-view .big-num{font-size:64px;font-weight:800;color:var(--main);margin:12px 0}
+#result-view .rs-sub{font-size:14px;color:var(--sub);margin-bottom:24px}
+#result-view .rs-stats{display:flex;gap:24px;margin-bottom:24px}
+#result-view .rs-stats .si .num{font-size:22px;font-weight:700}
+#result-view .rs-stats .si .lbl{font-size:11px;color:var(--sub)}
+.rs-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px}
+.rs-actions button{padding:13px;border-radius:10px;font-size:14px;font-weight:600}
+
+/* ===== 错题本 ===== */
+#wrong-view{display:none;flex:1;flex-direction:column;min-height:100vh;padding:16px 16px 80px}
+.wrong-item{background:var(--card);border-radius:12px;padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
+.wrong-item .wt{font-size:11px;color:var(--sub);margin-bottom:4px}
+.wrong-item .wq{font-size:14px;line-height:1.5;margin-bottom:6px}
+.wrong-item .wa{font-size:13px;display:flex;gap:12px;flex-wrap:wrap}
+.wrong-item .wa .yr{color:var(--err)}
+.wrong-item .wa .co{color:var(--ok)}
+
+/* 空状态 */
+.empty{text-align:center;padding:60px 20px;color:var(--sub)}
+.empty .ico{font-size:48px;margin-bottom:12px;opacity:.5}
+
+/* 浮动操作 */
+.fab{position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:50%;background:var(--main);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(123,147,164,.5);z-index:50}
+
+/* 记忆法弹层 */
+.modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none}
+.modal-mask.show{display:flex;align-items:flex-end;justify-content:center}
+.modal{background:var(--card);width:100%;max-width:640px;border-radius:20px 20px 0 0;padding:20px 20px 32px;max-height:80vh;overflow-y:auto;animation:slideup .3s}
+@keyframes slideup{from{transform:translateY(100%)}to{transform:none}}
+.modal h2{font-size:18px;margin-bottom:12px;text-align:center}
+.modal .tip-card{background:var(--bg);border-radius:10px;padding:14px;margin-bottom:10px;border-left:4px solid var(--main)}
+.modal .tip-card .th{font-size:14px;font-weight:700;color:var(--main);margin-bottom:4px}
+.modal .tip-card .tb{font-size:13px;line-height:1.6}
+.modal .close-btn{margin-top:12px;width:100%;padding:12px;border-radius:10px;background:var(--main);color:#fff;font-size:15px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ========== 首页 ========== -->
+<div id="home-view">
+  <div class="logo">
+    <div class="ic">👟</div>
+    <h1>制鞋工三级题库速记</h1>
+    <div class="sub">高级工理论考核 · 600题全覆盖</div>
+  </div>
+
+  <div class="stats-card">
+    <div class="si"><div class="num" id="stat-total">600</div><div class="lbl">题库总量</div></div>
+    <div class="si"><div class="num" id="stat-done">0</div><div class="lbl">已练习</div></div>
+    <div class="si"><div class="num" id="stat-acc">--</div><div class="lbl">正确率</div></div>
+    <div class="si"><div class="num" id="stat-wrong">0</div><div class="lbl">错题数</div></div>
+  </div>
+
+  <div class="section-title">🚀 刷题模式</div>
+  <div class="mode-grid">
+    <button class="mode-card" onclick="startQuiz('all','random')">
+      <div class="ico">🎲</div>
+      <div class="tt">随机刷题</div>
+      <div class="ds">600题乱序</div>
+    </button>
+    <button class="mode-card" onclick="showWrong()">
+      <div class="ico">📕</div>
+      <div class="tt">错题本</div>
+      <div class="ds">查看错题</div>
+    </button>
+    <button class="mode-card" onclick="startQuiz('judge','random')">
+      <div class="ico">✓</div>
+      <div class="tt">判断专项</div>
+      <div class="ds">250题</div>
+    </button>
+    <button class="mode-card" onclick="startQuiz('single','random')">
+      <div class="ico">📝</div>
+      <div class="tt">单选专项</div>
+      <div class="ds">250题</div>
+    </button>
+    <button class="mode-card" onclick="startQuiz('multi','random')">
+      <div class="ico">☑</div>
+      <div class="tt">多选专项</div>
+      <div class="ds">100题</div>
+    </button>
+    <button class="mode-card" onclick="showMemoryTips()">
+      <div class="ico">🧠</div>
+      <div class="tt">记忆法</div>
+      <div class="ds">速记技巧</div>
+    </button>
+  </div>
+
+  <div class="section-title">📚 按模块练习</div>
+  <div class="module-list" id="module-list"></div>
+</div>
+
+<!-- ========== 答题视图 ========== -->
+<div id="quiz-view">
+  <div class="qheader">
+    <button class="back" onclick="exitQuiz()">‹</button>
+    <div class="progress"><div class="bar" id="qbar"></div></div>
+    <div class="cnt"><b id="qnow">0</b>/<span id="qtotal">0</span></div>
+  </div>
+  <div class="qbody" id="qbody"></div>
+  <div class="qfooter">
+    <button class="btn-ghost" onclick="skipQuestion()">跳过</button>
+    <button class="btn-main" id="next-btn" onclick="nextQuestion()">下一题</button>
+  </div>
+</div>
+
+<!-- ========== 结果页 ========== -->
+<div id="result-view">
+  <div style="font-size:40px">🎯</div>
+  <div class="big-num" id="rs-score">0</div>
+  <div class="rs-sub" id="rs-msg"></div>
+  <div class="rs-stats">
+    <div class="si"><div class="num" id="rs-right" style="color:var(--ok)">0</div><div class="lbl">答对</div></div>
+    <div class="si"><div class="num" id="rs-wrong" style="color:var(--err)">0</div><div class="lbl">答错</div></div>
+    <div class="si"><div class="num" id="rs-skip">0</div><div class="lbl">跳过</div></div>
+  </div>
+  <div class="rs-actions">
+    <button class="btn-main" onclick="retryWrong()">只练错题</button>
+    <button class="btn-ghost" onclick="goHome()">返回首页</button>
+  </div>
+</div>
+
+<!-- ========== 错题本 ========== -->
+<div id="wrong-view">
+  <div class="qheader" style="border-radius:0 0 14px 14px">
+    <button class="back" onclick="goHome()">‹</button>
+    <div style="flex:1;text-align:center;font-weight:600">错题本 (<span id="wrong-cnt">0</span>)</div>
+    <button class="back" onclick="clearWrong()" style="font-size:14px">清空</button>
+  </div>
+  <div id="wrong-list" style="padding-top:12px"></div>
+</div>
+
+</div>
+
+<!-- 记忆法弹层 -->
+<div class="modal-mask" id="tip-modal">
+  <div class="modal">
+    <h2>🧠 制鞋题库速记技巧</h2>
+    <div id="tip-content"></div>
+    <button class="close-btn" onclick="closeModal()">明白</button>
+  </div>
+</div>
+
+<script>
+// ============ 数据 & 状态 ============
+var TYPE_NAME={judge:'判断',single:'单选',multi:'多选'};
+var LS_KEY='shoemaker_quiz_v1';
+var state={view:'home',mode:'',qids:[],idx:0,right:0,wrong:0,skip:0,answered:false};
+
+function loadState(){
+  try{var s=JSON.parse(localStorage.getItem(LS_KEY));return s||{done:{},wrong:{}};}catch(e){return{done:{},wrong:{}};}
+}
+function saveState(s){localStorage.setItem(LS_KEY,JSON.stringify(s));}
+
+// ============ 首页渲染 ============
+function renderHome(){
+  var s=loadState();
+  var doneCount=Object.keys(s.done||{}).length;
+  var wrongCount=Object.keys(s.wrong||{}).length;
+  var acc='--';
+  if(doneCount>0){
+    var rightCount=0;
+    Object.values(s.done).forEach(function(v){if(v==='right')rightCount++;});
+    acc=Math.round(rightCount/doneCount*100)+'%';
+  }
+  document.getElementById('stat-total').textContent=QUESTION_BANK.length;
+  document.getElementById('stat-done').textContent=doneCount;
+  document.getElementById('stat-acc').textContent=acc;
+  document.getElementById('stat-wrong').textContent=wrongCount;
+
+  // 模块列表
+  var mods={};
+  QUESTION_BANK.forEach(function(q){mods[q.m]=(mods[q.m]||0)+1;});
+  var colors={'职业道德':'#e67e22','基础知识':'#3498db','生产准备':'#9b59b6','部件制作':'#1abc9c','特种工艺':'#e74c3c','鞋帮制作与整型':'#2c3e50','整鞋成型':'#f39c12','检验':'#16a085','综合':'#7B93A4'};
+  var html='';
+  Object.keys(mods).sort(function(a,b){return mods[b]-mods[a];}).forEach(function(m){
+    html+='<div class="module-item" onclick="startQuiz(\''+m+'\',\'module\')">'+
+      '<div class="dot" style="background:'+(colors[m]||'#7B93A4')+'"></div>'+
+      '<div class="mn">'+m+'</div>'+
+      '<div class="mc">'+mods[m]+'题</div></div>';
+  });
+  document.getElementById('module-list').innerHTML=html;
+}
+
+// ============ 开始刷题 ============
+function startQuiz(filter,mode){
+  var ids=[];
+  QUESTION_BANK.forEach(function(q,i){
+    var ok=false;
+    if(filter==='all')ok=true;
+    else if(filter==='judge')ok=q.t==='judge';
+    else if(filter==='single')ok=q.t==='single';
+    else if(filter==='multi')ok=q.t==='multi';
+    else if(filter==='wrong'){var s=loadState();ok=s.wrong&&s.wrong[i]===true;}
+    else ok=q.m===filter; // 模块
+    if(ok)ids.push(i);
+  });
+  if(ids.length===0){alert('没有符合条件的题目');return;}
+
+  // 随机打乱
+  if(mode==='random'||mode==='wrong'){
+    ids.sort(function(){return Math.random()-0.5;});
+  }
+
+  state={view:'quiz',mode:mode,qids:ids,idx:0,right:0,wrong:0,skip:0,answered:false};
+  document.getElementById('home-view').classList.add('hidden');
+  document.getElementById('quiz-view').style.display='flex';
+  document.getElementById('quiz-view').classList.remove('hidden');
+  renderQuestion();
+}
+
+function exitQuiz(){
+  state.view='home';
+  document.getElementById('quiz-view').style.display='none';
+  document.getElementById('quiz-view').classList.add('hidden');
+  document.getElementById('home-view').classList.remove('hidden');
+  renderHome();
+}
+
+function goHome(){
+  state.view='home';
+  document.getElementById('result-view').style.display='none';
+  document.getElementById('wrong-view').style.display='none';
+  document.getElementById('home-view').classList.remove('hidden');
+  renderHome();
+}
+
+// ============ 渲染题目 ============
+function renderQuestion(){
+  if(state.idx>=state.qids.length){showResult();return;}
+  var q=QUESTION_BANK[state.qids[state.idx]];
+  var s=loadState();
+  state.answered=false;
+
+  var pbar=((state.idx)/state.qids.length*100);
+  document.getElementById('qbar').style.width=pbar+'%';
+  document.getElementById('qnow').textContent=state.idx+1;
+  document.getElementById('qtotal').textContent=state.qids.length;
+
+  var tname=TYPE_NAME[q.t];
+  var body='<div class="qtag">'+tname+'题<span class="m">· '+q.m+'</span></div>';
+  body+='<div class="qtext">'+q.n+'. '+q.q+'</div>';
+
+  if(q.t==='judge'){
+    body+='<div class="tf-row">'+
+      '<div class="tf-btn" data-v="√" onclick="judgeAnswer(this,\'√\')"><span class="ico">✓</span>正确</div>'+
+      '<div class="tf-btn" data-v="×" onclick="judgeAnswer(this,\'×\')"><span class="ico">✗</span>错误</div>'+
+      '</div>';
+  }else{
+    body+='<div class="opts" id="opts-area">';
+    var letters=q.t==='multi'?'ABCDE':'ABCD';
+    var selMulti=q.t==='multi'?[]:null;
+    for(var i=0;i<letters.length;i++){
+      var L=letters[i];
+      if(!q.o||!q.o[L])break;
+      body+='<div class="opt" data-l="'+L+'" onclick="'+(q.t==='multi'?'multiSelect(this)':'singleSelect(this)')+'">'+
+        '<div class="ltr">'+L+'</div><div>'+q.o[L]+'</div></div>';
+    }
+    if(q.t==='multi'){
+      body+='</div><div style="margin-top:12px;text-align:center"><button class="btn-main" style="max-width:200px;padding:10px 24px;border-radius:10px" onclick="submitMulti()">确认提交</button></div>';
+    }else{
+      body+='</div>';
+    }
+  }
+  body+='<div id="explain-area"></div>';
+  document.getElementById('qbody').innerHTML=body;
+  document.getElementById('next-btn').textContent='下一题';
+  document.getElementById('next-btn').disabled=false;
+}
+
+// ---- 判断题 ----
+function judgeAnswer(el,v){
+  if(state.answered)return;
+  state.answered=true;
+  var q=QUESTION_BANK[state.qids[state.idx]];
+  var correct=v===q.a;
+  document.querySelectorAll('.tf-btn').forEach(function(b){
+    if(b.getAttribute('data-v')===q.a)b.classList.add('correct');
+  });
+  if(correct){
+    el.classList.add('correct');
+    state.right++;
+  }else{
+    el.classList.add('wrong');
+    state.wrong++;
+  }
+  recordAnswer(correct,q);
+  showExplain(q,correct);
+}
+
+// ---- 单选题 ----
+function singleSelect(el){
+  if(state.answered)return;
+  state.answered=true;
+  var q=QUESTION_BANK[state.qids[state.idx]];
+  var L=el.getAttribute('data-l');
+  var correct=L===q.a;
+  el.classList.add('selected');
+  document.querySelectorAll('.opt').forEach(function(o){
+    var ol=o.getAttribute('data-l');
+    if(ol===q.a)o.classList.add('correct');
+  });
+  if(!correct){el.classList.add('wrong');}
+  if(correct)state.right++;else state.wrong++;
+  recordAnswer(correct,q);
+  showExplain(q,correct);
+}
+
+// ---- 多选题 ----
+var multiSel=[];
+function multiSelect(el){
+  if(state.answered)return;
+  var L=el.getAttribute('data-l');
+  if(el.classList.contains('selected')){
+    el.classList.remove('selected');
+    multiSel=multiSel.filter(function(x){return x!==L;});
+  }else{
+    el.classList.add('selected');
+    multiSel.push(L);
+  }
+}
+function submitMulti(){
+  if(state.answered)return;
+  state.answered=true;
+  var q=QUESTION_BANK[state.qids[state.idx]];
+  multiSel.sort();
+  var userAns=multiSel.join('');
+  var correct=userAns===q.a;
+  document.querySelectorAll('.opt').forEach(function(o){
+    var ol=o.getAttribute('data-l');
+    if(q.a.indexOf(ol)>=0)o.classList.add('correct');
+  });
+  if(!correct){
+    // 把用户选错的标红
+    multiSel.forEach(function(L){
+      if(q.a.indexOf(L)<0){
+        var el=document.querySelector('.opt[data-l="'+L+'"]');
+        if(el)el.classList.add('wrong');
+      }
+    });
+  }
+  if(correct)state.right++;else state.wrong++;
+  recordAnswer(correct,q);
+  showExplain(q,correct);
+  multiSel=[];
+}
+
+// ---- 记录答案 ----
+function recordAnswer(correct,q){
+  var s=loadState();
+  var qid=state.qids[state.idx];
+  if(!s.done)s.done={};
+  s.done[qid]=correct?'right':'wrong';
+  if(!s.wrong)s.wrong={};
+  if(correct){delete s.wrong[qid];}
+  else{s.wrong[qid]=true;}
+  saveState(s);
+}
+
+// ---- 显示解析 ----
+function showExplain(q,correct){
+  var area=document.getElementById('explain-area');
+  var ansDisplay=q.a;
+  if(q.t==='single'||q.t==='multi'){
+    ansDisplay=q.a.split('').map(function(L){return q.o[L];}).join(' / ');
+  }else{
+    ansDisplay=q.a==='√'?'正确':'错误';
+  }
+  var tip=genTip(q);
+  area.innerHTML='<div class="explain">'+
+    '<div class="ans-line">正确答案：<b>'+ansDisplay+'</b>'+(correct?'　✅':'　❌')+'</div>'+
+    (tip?'<div class="tip">'+tip+'</div>':'')+
+    '</div>';
+}
+
+// ---- 生成记忆提示 ----
+function genTip(q){
+  var t='';
+  var text=q.q;
+  // 绝对化词提示
+  var absWords=['所有','任何','都能','一律','全部','即可','随意','无需','越','必然','一定','必须'];
+  var hasAbs=absWords.some(function(w){return text.indexOf(w)>=0;});
+  if(q.t==='judge'){
+    if(hasAbs&&q.a==='×'){
+      t='⚠️ 含绝对化表述（"所有/随意/无需/越…越"等），判断题中这类表述多为×。';
+    }else if((text.indexOf('不')>=0||text.indexOf('无')>=0)&&q.a==='×'){
+      t='⚠️ 含否定表述（"不/无"），判断题中否定句多为×。';
+    }else if(q.a==='√'){
+      t='✅ 正面描述（质量优先/规范操作/安全节能），多为√。';
+    }else{
+      t='❌ 与正确工艺/安全规范相悖的描述，多为×。';
+    }
+  }else if(q.t==='single'){
+    // "以上都是"" 以上都不对"
+    if(q.a==='D'&&q.o&&q.o.D&&(q.o.D.indexOf('以上都')>=0||q.o.D.indexOf('以上')>=0)){
+      t='💡 "以上都是/以上都对"类选项，当ABC都成立时选D。';
+    }
+    if(q.a==='C'&&q.o&&q.o.C&&q.o.C.indexOf('主要')>=0){
+      t='💡 "主要部位/主要部件"类，强调核心优先级。';
+    }
+  }else if(q.t==='multi'){
+    var n=q.a.length;
+    t='💡 多选题常见规律：'+n+'个正确项。排除明显荒谬的选项（"随意/无需/忽略"等），剩余多为正确。';
+  }
+  return t;
+}
+
+// ---- 下一题 ----
+function nextQuestion(){
+  if(!state.answered){
+    // 未作答直接跳过
+    state.skip++;
+    var s=loadState();
+    // 不记录为错题
+  }
+  state.idx++;
+  renderQuestion();
+}
+function skipQuestion(){
+  if(!state.answered){
+    state.skip++;
+  }
+  state.idx++;
+  renderQuestion();
+}
+
+// ============ 结果页 ============
+function showResult(){
+  var total=state.qids.length;
+  var score=Math.round(state.right/total*100);
+  document.getElementById('rs-score').textContent=score;
+  document.getElementById('rs-right').textContent=state.right;
+  document.getElementById('rs-wrong').textContent=state.wrong;
+  document.getElementById('rs-skip').textContent=state.skip;
+
+  var msg='';
+  if(score>=90)msg='🎉 太强了！掌握得非常扎实';
+  else if(score>=75)msg='👍 不错，再练练就能稳过';
+  else if(score>=60)msg='💪 及格线，错题再刷一遍';
+  else msg='📚 还需努力，建议分模块练习';
+  document.getElementById('rs-msg').textContent=msg;
+
+  document.getElementById('quiz-view').style.display='none';
+  document.getElementById('result-view').style.display='flex';
+}
+
+function retryWrong(){
+  document.getElementById('result-view').style.display='none';
+  startQuiz('wrong','wrong');
+}
+
+// ============ 错题本 ============
+function showWrong(){
+  var s=loadState();
+  var wrongIds=Object.keys(s.wrong||{}).map(Number);
+  document.getElementById('wrong-cnt').textContent=wrongIds.length;
+  var list=document.getElementById('wrong-list');
+  if(wrongIds.length===0){
+    list.innerHTML='<div class="empty"><div class="ico">🎉</div><div>暂无错题</div></div>';
+  }else{
+    var html='';
+    wrongIds.forEach(function(id){
+      var q=QUESTION_BANK[id];
+      var ansDisplay=q.a;
+      if(q.t==='single'||q.t==='multi'){
+        ansDisplay=q.a.split('').map(function(L){return q.o[L];}).join(' / ');
+      }else{
+        ansDisplay=q.a==='√'?'正确':'错误';
+      }
+      html+='<div class="wrong-item">'+
+        '<div class="wt">'+TYPE_NAME[q.t]+'题 · '+q.m+'</div>'+
+        '<div class="wq">'+q.n+'. '+q.q+'</div>'+
+        '<div class="wa"><span class="co">✅ '+ansDisplay+'</span></div>'+
+        '</div>';
+    });
+    list.innerHTML=html;
+  }
+  document.getElementById('home-view').classList.add('hidden');
+  document.getElementById('wrong-view').style.display='flex';
+}
+
+function clearWrong(){
+  if(!confirm('确定清空错题本吗？'))return;
+  var s=loadState();
+  s.wrong={};
+  saveState(s);
+  showWrong();
+}
+
+// ============ 记忆法弹层 ============
+function showMemoryTips(){
+  var tips=[
+    {h:'判断题"绝对化"信号词',b:'题目出现"所有、任何、都能、一律、随意、无需、越…越…"等绝对化措辞时，答案大概率是×（错误）。本库中含此类词的判断题约62%为×。'},
+    {h:'判断题否定句多为×',b:'含"不、无、未"等否定词的判断题，约52%为×。否定表述常将正确做法说成"不需要/无关/无影响"。'},
+    {h:'判断题正面描述多为√',b:'正面描述质量优先、规范操作、安全节能、材料适配等正确做法的，约60%为√。'},
+    {h:'单选题B选项偏好',b:'本题库单选题答案分布：A 20% / B 44% / C 22% / D 15%。B选项出现概率最高，猜题时优先考虑B。'},
+    {h:'单选"以上都是"套路',b:'选项D含"以上都是/以上都对"，当ABC三个选项都合理时，答案选D。'},
+    {h:'多选题排除法',b:'多选题答案分布：3个43% / 4个46% / 2个8% / 5个6%。含"随意设定/可接受/无需处理"等荒谬选项必排除，其余多为正确。'},
+    {h:'模块知识图谱',b:'8大模块按题量排序：基础知识(133)>部件制作(113)>综合(86)>生产准备(62)>整鞋成型(58)>鞋帮制作整型(48)>特种工艺(46)>职业道德(29)>检验(25)。基础知识占比最高，优先突破。'},
+    {h:'高频数字考点',b:'鞋号等差：中国5mm/半码、欧码6.67mm、英码8.46mm；压茬量8mm；折边量8mm；冲里量4mm；起收针3-5针；第一鞋眼距鞋口2mm；帮脚吃帮量<6mm隐患。'},
+    {h:'材料性能对比口诀',b:'天然皮革 vs 合成革：透气✓吸湿✓厚薄均匀✗ → 天然更优；涤纶线耐磨>棉线；橡胶底防滑>PU底；PU底轻便弹性好。'},
+    {h:'工艺参数记忆',b:'烘干活化50-60℃/20-25min→指触干；硫化105-114℃→实际偏高温（题库判定×）；高频熔接硬PVC需大功率；热压花温度过高→焦糊。'},
+  ];
+  var html='';
+  tips.forEach(function(t){
+    html+='<div class="tip-card"><div class="th">'+t.h+'</div><div class="tb">'+t.b+'</div></div>';
+  });
+  document.getElementById('tip-content').innerHTML=html;
+  document.getElementById('tip-modal').classList.add('show');
+}
+function closeModal(){document.getElementById('tip-modal').classList.remove('show');}
+
+// ============ 启动 ============
+renderHome();
+// 暴露给全局
+window.startQuiz=startQuiz;
+window.showMemoryTips=showMemoryTips;
+window.exitQuiz=exitQuiz;
+window.goHome=goHome;
+window.retryWrong=retryWrong;
+window.judgeAnswer=judgeAnswer;
+window.singleSelect=singleSelect;
+window.multiSelect=multiSelect;
+window.submitMulti=submitMulti;
+window.nextQuestion=nextQuestion;
+window.skipQuestion=skipQuestion;
+window.showWrong=showWrong;
+window.clearWrong=clearWrong;
+window.closeModal=closeModal;
+</script>
+</body>
+</html>
