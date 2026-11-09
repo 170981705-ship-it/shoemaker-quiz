@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>制鞋工三级·题库速记</title>
 <script src="questions.js"></script>
+<script src="bank-manager.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--main:#7B93A4;--main-d:#617888;--main-l:#D6DEE4;--bg:#F2F5F7;--card:#FFFFFF;--text:#2C3E50;--sub:#7F8C8D;--ok:#52c41a;--err:#e74c3c;--shadow:0 2px 12px rgba(123,147,164,.15);--radius:14px}
@@ -123,6 +124,56 @@ button{border:none;outline:none;font-family:inherit;cursor:pointer}
 .modal .tip-card .th{font-size:14px;font-weight:700;color:var(--main);margin-bottom:4px}
 .modal .tip-card .tb{font-size:13px;line-height:1.6}
 .modal .close-btn{margin-top:12px;width:100%;padding:12px;border-radius:10px;background:var(--main);color:#fff;font-size:15px;font-weight:600}
+
+/* ===== 题库选择器 ===== */
+.bank-bar{background:var(--card);border-radius:var(--radius);padding:12px 14px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.bank-bar .bb-ic{width:36px;height:36px;border-radius:10px;background:var(--main-l);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.bank-bar .bb-info{flex:1;min-width:0}
+.bank-bar .bb-label{font-size:11px;color:var(--sub)}
+.bank-bar .bb-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bank-bar .bb-btn{font-size:12px;color:var(--main);padding:6px 10px;background:var(--bg);border-radius:8px;white-space:nowrap}
+
+/* ===== 题库管理页 ===== */
+#bank-view{display:none;flex:1;flex-direction:column;min-height:100vh;padding:16px 16px 80px}
+.bank-card{background:var(--card);border-radius:12px;padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px}
+.bank-card.active{border:2px solid var(--main)}
+.bank-card .bk-ic{width:40px;height:40px;border-radius:10px;background:var(--main-l);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.bank-card .bk-main{flex:1;min-width:0}
+.bank-card .bk-name{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bank-card .bk-meta{font-size:11px;color:var(--sub);margin-top:2px}
+.bank-card .bk-tag{font-size:10px;padding:2px 7px;border-radius:6px;background:var(--bg);color:var(--sub);margin-left:6px}
+.bank-card .bk-ops{display:flex;gap:6px;flex-shrink:0}
+.bank-card .bk-ops button{font-size:11px;padding:5px 9px;border-radius:7px;background:var(--bg);color:var(--main)}
+.bank-card .bk-ops .del{color:var(--err)}
+
+.import-zone{background:var(--card);border-radius:var(--radius);padding:20px 16px;box-shadow:var(--shadow);margin-bottom:12px;text-align:center;border:2px dashed var(--main-l)}
+.import-zone .iz-ic{font-size:34px;margin-bottom:6px}
+.import-zone .iz-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.import-zone .iz-desc{font-size:12px;color:var(--sub);margin-bottom:14px;line-height:1.6}
+.import-zone .iz-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.import-zone .iz-btns button{padding:9px 14px;border-radius:9px;font-size:13px;font-weight:600;background:var(--main);color:#fff}
+.import-zone .iz-btns button.sec{background:var(--bg);color:var(--main)}
+.hint-box{background:var(--bg);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--sub);line-height:1.7;margin-bottom:12px}
+.hint-box b{color:var(--text)}
+
+/* 导入弹层 */
+#import-modal .modal{max-height:88vh}
+.imp-tabs{display:flex;gap:8px;margin-bottom:14px}
+.imp-tabs button{flex:1;padding:9px;border-radius:8px;font-size:13px;background:var(--bg);color:var(--sub)}
+.imp-tabs button.on{background:var(--main);color:#fff;font-weight:600}
+.imp-pane{display:none}
+.imp-pane.on{display:block}
+.imp-textarea{width:100%;min-height:150px;border:2px solid var(--main-l);border-radius:10px;padding:12px;font-size:13px;font-family:inherit;resize:vertical;line-height:1.6}
+.imp-name{width:100%;border:2px solid var(--main-l);border-radius:10px;padding:10px 12px;font-size:14px;margin-bottom:10px}
+.preview-box{background:var(--bg);border-radius:10px;padding:12px;margin-top:12px;font-size:13px}
+.preview-box .pv-stat{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.preview-box .pv-stat span{background:var(--card);padding:4px 10px;border-radius:7px;font-size:12px}
+.preview-box .pv-q{border-top:1px solid var(--main-l);padding:8px 0;font-size:12px;line-height:1.5}
+.preview-box .pv-q:first-of-type{border-top:none}
+.preview-box .pv-q .pq-t{color:var(--main);font-weight:600}
+.preview-box .pv-warn{color:var(--err);font-size:12px;margin-top:8px}
+.imp-actions{display:flex;gap:10px;margin-top:14px}
+.imp-actions button{flex:1;padding:12px;border-radius:10px;font-size:14px;font-weight:600}
 </style>
 </head>
 <body>
@@ -132,8 +183,17 @@ button{border:none;outline:none;font-family:inherit;cursor:pointer}
 <div id="home-view">
   <div class="logo">
     <div class="ic">👟</div>
-    <h1>制鞋工三级题库速记</h1>
-    <div class="sub">高级工理论考核 · 600题全覆盖</div>
+    <h1>制鞋工题库速记</h1>
+    <div class="sub">支持导入其他题库 · 随时随地刷题</div>
+  </div>
+
+  <div class="bank-bar" onclick="showBankManager()">
+    <div class="bb-ic">📚</div>
+    <div class="bb-info">
+      <div class="bb-label">当前题库</div>
+      <div class="bb-name" id="cur-bank-name">制鞋工三级题库</div>
+    </div>
+    <div class="bb-btn">切换 / 导入 ›</div>
   </div>
 
   <div class="stats-card">
@@ -148,7 +208,7 @@ button{border:none;outline:none;font-family:inherit;cursor:pointer}
     <button class="mode-card" onclick="startQuiz('all','random')">
       <div class="ico">🎲</div>
       <div class="tt">随机刷题</div>
-      <div class="ds">600题乱序</div>
+      <div class="ds" id="mode-ds-all">本题库乱序</div>
     </button>
     <button class="mode-card" onclick="showWrong()">
       <div class="ico">📕</div>
@@ -158,27 +218,31 @@ button{border:none;outline:none;font-family:inherit;cursor:pointer}
     <button class="mode-card" onclick="startQuiz('judge','random')">
       <div class="ico">✓</div>
       <div class="tt">判断专项</div>
-      <div class="ds">250题</div>
+      <div class="ds" id="mode-ds-judge">判断题</div>
     </button>
     <button class="mode-card" onclick="startQuiz('single','random')">
       <div class="ico">📝</div>
       <div class="tt">单选专项</div>
-      <div class="ds">250题</div>
+      <div class="ds" id="mode-ds-single">单选题</div>
     </button>
     <button class="mode-card" onclick="startQuiz('multi','random')">
       <div class="ico">☑</div>
       <div class="tt">多选专项</div>
-      <div class="ds">100题</div>
+      <div class="ds" id="mode-ds-multi">多选题</div>
     </button>
-    <button class="mode-card" onclick="showMemoryTips()">
-      <div class="ico">🧠</div>
-      <div class="tt">记忆法</div>
-      <div class="ds">速记技巧</div>
+    <button class="mode-card" onclick="showBankManager()">
+      <div class="ico">📥</div>
+      <div class="tt">导入题库</div>
+      <div class="ds">上传Excel/文本</div>
     </button>
   </div>
 
   <div class="section-title">📚 按模块练习</div>
   <div class="module-list" id="module-list"></div>
+
+  <div style="text-align:center;margin-top:18px">
+    <button onclick="showMemoryTips()" style="background:transparent;color:var(--sub);font-size:12px;text-decoration:underline">🧠 查看速记技巧</button>
+  </div>
 </div>
 
 <!-- ========== 答题视图 ========== -->
@@ -221,6 +285,42 @@ button{border:none;outline:none;font-family:inherit;cursor:pointer}
   <div id="wrong-list" style="padding-top:12px"></div>
 </div>
 
+<!-- ========== 题库管理 ========== -->
+<div id="bank-view">
+  <div class="qheader" style="border-radius:0 0 14px 14px">
+    <button class="back" onclick="goHome()">‹</button>
+    <div style="flex:1;text-align:center;font-weight:600">题库管理</div>
+    <div style="width:30px"></div>
+  </div>
+
+  <div style="padding-top:14px">
+    <div class="section-title">📚 我的题库（点击切换）</div>
+    <div id="bank-list"></div>
+
+    <div class="section-title" style="margin-top:18px">📥 导入新题库</div>
+    <div class="import-zone">
+      <div class="iz-ic">📄</div>
+      <div class="iz-title">上传题库文件</div>
+      <div class="iz-desc">支持 Excel(.xlsx/.xls)、CSV、JSON、TXT<br>也可直接粘贴 PDF / Word 复制的文本</div>
+      <div class="iz-btns">
+        <button onclick="document.getElementById('file-input').click()">选择文件</button>
+        <button class="sec" onclick="openImportModal('text')">粘贴文本</button>
+        <button class="sec" onclick="downloadTemplate()">下载模板</button>
+      </div>
+      <input type="file" id="file-input" accept=".xlsx,.xls,.csv,.json,.txt" style="display:none" onchange="handleFileSelect(event)">
+    </div>
+
+    <div class="hint-box">
+      <b>表格格式说明</b><br>
+      必需列：<b>题干</b>、<b>答案</b>；可选列：题型、题号、选项A~E、模块。<br>
+      判断题答案填 <b>√ / ×</b>；选择题答案填 <b>A / ABC</b> 这样的字母。<br>
+      不填「题型」时，系统按答案自动识别（√×→判断，单字母→单选，多字母→多选）。<br><br>
+      <b>关于分享</b><br>
+      导入的题库保存在本机浏览器。要让其他同事也刷到，请用「导出」把题库文件发给他们导入；或联系管理员把题库发布为公共题库，全员打开链接即可见。
+    </div>
+  </div>
+</div>
+
 </div>
 
 <!-- 记忆法弹层 -->
@@ -232,40 +332,91 @@ button{border:none;outline:none;font-family:inherit;cursor:pointer}
   </div>
 </div>
 
+<!-- 导入弹层 -->
+<div class="modal-mask" id="import-modal">
+  <div class="modal">
+    <h2>📥 导入题库</h2>
+    <div class="imp-tabs">
+      <button id="tab-file" class="on" onclick="switchImportTab('file')">上传文件</button>
+      <button id="tab-text" onclick="switchImportTab('text')">粘贴文本</button>
+    </div>
+
+    <div class="imp-pane on" id="pane-file">
+      <div class="import-zone" style="margin-bottom:10px;padding:18px 12px">
+        <div class="iz-ic">📄</div>
+        <div class="iz-desc" id="imp-file-hint">选择 .xlsx / .xls / .csv / .json / .txt 文件</div>
+        <div class="iz-btns"><button onclick="document.getElementById('modal-file-input').click()">选择文件</button></div>
+        <input type="file" id="modal-file-input" accept=".xlsx,.xls,.csv,.json,.txt" style="display:none" onchange="handleFileSelect(event)">
+      </div>
+    </div>
+
+    <div class="imp-pane" id="pane-text">
+      <div class="hint-box" style="margin-bottom:8px">
+        把 PDF / Word 里的题库文字全选复制粘贴进来。支持「1.题干（√）」「1.题干（A）」+ ABCD 选项行的格式，也支持粘贴表格文本。
+      </div>
+      <textarea id="imp-textarea" class="imp-textarea" placeholder="在此粘贴题库文本…&#10;&#10;一、判断题&#10;1.制鞋工应保证产品质量。（√）&#10;2.可适当降低检验标准。（×）&#10;&#10;二、单选题&#10;1.透气性最好的是（A）&#10;A.天然皮革  B.PU合成革  C.超纤革  D.PVC革"></textarea>
+      <button class="btn-main" style="width:100%;margin-top:8px;padding:11px;border-radius:10px" onclick="parsePastedText()">解析文本</button>
+    </div>
+
+    <input id="imp-name" class="imp-name" placeholder="题库名称（可修改）" style="margin-top:12px">
+
+    <div id="imp-preview"></div>
+
+    <div class="imp-actions">
+      <button class="btn-ghost" onclick="closeImportModal()">取消</button>
+      <button class="btn-main" id="imp-confirm" onclick="confirmImport()" disabled>确认导入</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ============ 数据 & 状态 ============
 var TYPE_NAME={judge:'判断',single:'单选',multi:'多选'};
-var LS_KEY='shoemaker_quiz_v1';
 var state={view:'home',mode:'',qids:[],idx:0,right:0,wrong:0,skip:0,answered:false};
+var pendingImport=null;   // 待确认的导入结果
 
-function loadState(){
-  try{var s=JSON.parse(localStorage.getItem(LS_KEY));return s||{done:{},wrong:{}};}catch(e){return{done:{},wrong:{}};}
-}
-function saveState(s){localStorage.setItem(LS_KEY,JSON.stringify(s));}
+// 当前题库的题目（每次动态取，切换题库后立即生效）
+function QB(){return BankManager.getActiveQuestions();}
+
+// 进度按题库隔离
+function loadState(){return BankManager.getProgress();}
+function saveState(s){BankManager.saveProgress(s);}
 
 // ============ 首页渲染 ============
 function renderHome(){
   var s=loadState();
+  var bank=BankManager.getActiveBank();
+  var questions=QB();
   var doneCount=Object.keys(s.done||{}).length;
   var wrongCount=Object.keys(s.wrong||{}).length;
   var acc='--';
   if(doneCount>0){
     var rightCount=0;
-    Object.values(s.done).forEach(function(v){if(v==='right')rightCount++;});
+    Object.keys(s.done||{}).forEach(function(k){if(s.done[k]==='right')rightCount++;});
     acc=Math.round(rightCount/doneCount*100)+'%';
   }
-  document.getElementById('stat-total').textContent=QUESTION_BANK.length;
+  document.getElementById('stat-total').textContent=questions.length;
   document.getElementById('stat-done').textContent=doneCount;
   document.getElementById('stat-acc').textContent=acc;
   document.getElementById('stat-wrong').textContent=wrongCount;
 
-  // 模块列表
+  // 当前题库名
+  document.getElementById('cur-bank-name').textContent=bank?bank.name:'内置题库';
+
+  // 各模式题数动态显示
+  var sum=BankManager.summarize(questions);
+  document.getElementById('mode-ds-all').textContent=sum.total+'题乱序';
+  document.getElementById('mode-ds-judge').textContent=sum.judge+'题';
+  document.getElementById('mode-ds-single').textContent=sum.single+'题';
+  document.getElementById('mode-ds-multi').textContent=sum.multi+'题';
+
+  // 模块列表（自定义题库没有模块时隐藏该区块）
   var mods={};
-  QUESTION_BANK.forEach(function(q){mods[q.m]=(mods[q.m]||0)+1;});
+  questions.forEach(function(q){var m=q.m||'综合';mods[m]=(mods[m]||0)+1;});
   var colors={'职业道德':'#e67e22','基础知识':'#3498db','生产准备':'#9b59b6','部件制作':'#1abc9c','特种工艺':'#e74c3c','鞋帮制作与整型':'#2c3e50','整鞋成型':'#f39c12','检验':'#16a085','综合':'#7B93A4'};
   var html='';
   Object.keys(mods).sort(function(a,b){return mods[b]-mods[a];}).forEach(function(m){
-    html+='<div class="module-item" onclick="startQuiz(\''+m+'\',\'module\')">'+
+    html+='<div class="module-item" onclick="startQuiz(\''+m.replace(/'/g,"\\'")+'\',\'module\')">'+
       '<div class="dot" style="background:'+(colors[m]||'#7B93A4')+'"></div>'+
       '<div class="mn">'+m+'</div>'+
       '<div class="mc">'+mods[m]+'题</div></div>';
@@ -276,7 +427,7 @@ function renderHome(){
 // ============ 开始刷题 ============
 function startQuiz(filter,mode){
   var ids=[];
-  QUESTION_BANK.forEach(function(q,i){
+  QB().forEach(function(q,i){
     var ok=false;
     if(filter==='all')ok=true;
     else if(filter==='judge')ok=q.t==='judge';
@@ -312,6 +463,7 @@ function goHome(){
   state.view='home';
   document.getElementById('result-view').style.display='none';
   document.getElementById('wrong-view').style.display='none';
+  document.getElementById('bank-view').style.display='none';
   document.getElementById('home-view').classList.remove('hidden');
   renderHome();
 }
@@ -319,7 +471,7 @@ function goHome(){
 // ============ 渲染题目 ============
 function renderQuestion(){
   if(state.idx>=state.qids.length){showResult();return;}
-  var q=QUESTION_BANK[state.qids[state.idx]];
+  var q=QB()[state.qids[state.idx]];
   var s=loadState();
   state.answered=false;
 
@@ -363,7 +515,7 @@ function renderQuestion(){
 function judgeAnswer(el,v){
   if(state.answered)return;
   state.answered=true;
-  var q=QUESTION_BANK[state.qids[state.idx]];
+  var q=QB()[state.qids[state.idx]];
   var correct=v===q.a;
   document.querySelectorAll('.tf-btn').forEach(function(b){
     if(b.getAttribute('data-v')===q.a)b.classList.add('correct');
@@ -383,7 +535,7 @@ function judgeAnswer(el,v){
 function singleSelect(el){
   if(state.answered)return;
   state.answered=true;
-  var q=QUESTION_BANK[state.qids[state.idx]];
+  var q=QB()[state.qids[state.idx]];
   var L=el.getAttribute('data-l');
   var correct=L===q.a;
   el.classList.add('selected');
@@ -413,7 +565,7 @@ function multiSelect(el){
 function submitMulti(){
   if(state.answered)return;
   state.answered=true;
-  var q=QUESTION_BANK[state.qids[state.idx]];
+  var q=QB()[state.qids[state.idx]];
   multiSel.sort();
   var userAns=multiSel.join('');
   var correct=userAns===q.a;
@@ -551,7 +703,7 @@ function showWrong(){
   }else{
     var html='';
     wrongIds.forEach(function(id){
-      var q=QUESTION_BANK[id];
+      var q=QB()[id];
       var ansDisplay=q.a;
       if(q.t==='single'||q.t==='multi'){
         ansDisplay=q.a.split('').map(function(L){return q.o[L];}).join(' / ');
@@ -601,8 +753,259 @@ function showMemoryTips(){
 }
 function closeModal(){document.getElementById('tip-modal').classList.remove('show');}
 
+// ============================================================
+// ============ 题库管理 & 导入功能 ============
+// ============================================================
+
+function showBankManager(){
+  ['home-view'].forEach(function(id){document.getElementById(id).classList.add('hidden');});
+  document.getElementById('bank-view').style.display='flex';
+  renderBankList();
+}
+
+function renderBankList(){
+  var banks=BankManager.listBanks();
+  var activeId=BankManager.getActiveId();
+  var html='';
+  banks.forEach(function(b){
+    var tagText=b.source==='builtin'?'内置':(b.source==='public'?'公共':'本地');
+    var isActive=b.id===activeId;
+    html+='<div class="bank-card'+(isActive?' active':'')+'">'+
+      '<div class="bk-ic">'+(b.source==='builtin'?'👟':(b.source==='public'?'🌐':'📄'))+'</div>'+
+      '<div class="bk-main" onclick="switchBank(\''+b.id+'\')">'+
+        '<div class="bk-name">'+esc(b.name)+'<span class="bk-tag">'+tagText+'</span>'+(isActive?'<span class="bk-tag" style="background:var(--main);color:#fff">使用中</span>':'')+'</div>'+
+        '<div class="bk-meta">'+b.count+' 题'+(b.desc?' · '+esc(b.desc):'')+'</div>'+
+      '</div>'+
+      '<div class="bk-ops">'+
+        (b.questions?'<button onclick="doExportBank(\''+b.id+'\')">导出</button>':'')+
+        (b.source==='local'?'<button class="del" onclick="doDeleteBank(\''+b.id+'\')">删除</button>':'')+
+      '</div>'+
+    '</div>';
+  });
+  document.getElementById('bank-list').innerHTML=html;
+}
+
+function esc(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function switchBank(id){
+  if(!BankManager.setActiveId(id)){alert('切换失败');return;}
+  renderBankList();
+  renderHome();
+  goHome();
+}
+
+function doDeleteBank(id){
+  if(!confirm('确定删除这个题库吗？该题库的练习进度也会一并清除。'))return;
+  var r=BankManager.deleteBank(id);
+  if(!r.ok){alert(r.msg);return;}
+  renderBankList();
+  renderHome();
+}
+
+function doExportBank(id){
+  var json=BankManager.exportBank(id);
+  if(!json){alert('该题库暂不可导出');return;}
+  var b=BankManager.getBank(id);
+  downloadFile(json,(b?b.name:'题库')+'.json','application/json');
+}
+
+function downloadFile(content,filename,mime){
+  try{
+    var blob=new Blob([content],{type:(mime||'text/plain')+';charset=utf-8'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;a.download=filename;document.body.appendChild(a);a.click();
+    setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},500);
+  }catch(e){alert('下载失败：'+e.message);}
+}
+
+// ---------- CSV 模板 ----------
+function downloadTemplate(){
+  var csv='题型,题号,题干,选项A,选项B,选项C,选项D,选项E,答案,模块\n'+
+    '判断,1,制鞋工应严格遵守操作规程。,,,,,,√,职业道德\n'+
+    '判断,2,为提高效率可适当降低原材料检验标准。,,,,,,×,生产准备\n'+
+    '单选,3,下列材料中透气性能最好的是,天然皮革,PU合成革,超纤革,PVC革,,A,基础知识\n'+
+    '多选,4,制鞋工职业道德的核心要求包括,保证产品质量,遵守操作规程,节约原材料,藐视客户合理反馈,,ABC,职业道德\n';
+  downloadFile('\uFEFF'+csv,'题库导入模板.csv','text/csv');
+}
+
+// ---------- 导入弹层 ----------
+function openImportModal(tab){
+  pendingImport=null;
+  document.getElementById('imp-preview').innerHTML='';
+  document.getElementById('imp-confirm').disabled=true;
+  document.getElementById('imp-textarea').value='';
+  document.getElementById('imp-name').value='';
+  switchImportTab(tab||'file');
+  document.getElementById('import-modal').classList.add('show');
+}
+function closeImportModal(){
+  document.getElementById('import-modal').classList.remove('show');
+  pendingImport=null;
+}
+function switchImportTab(tab){
+  document.getElementById('tab-file').classList.toggle('on',tab==='file');
+  document.getElementById('tab-text').classList.toggle('on',tab==='text');
+  document.getElementById('pane-file').classList.toggle('on',tab==='file');
+  document.getElementById('pane-text').classList.toggle('on',tab==='text');
+}
+
+// ---------- 文件选择 ----------
+function handleFileSelect(e){
+  var file=e.target.files&&e.target.files[0];
+  if(!file)return;
+  e.target.value='';   // 允许重复选同一文件
+  var name=file.name;
+  var lower=name.toLowerCase();
+  var reader=new FileReader();
+
+  if(lower.endsWith('.xlsx')||lower.endsWith('.xls')){
+    // 懒加载 SheetJS
+    loadSheetJS(function(ok){
+      if(!ok){alert('Excel 解析组件加载失败，请把文件另存为 CSV 后重试。');return;}
+      reader.onload=function(ev){
+        try{
+          var data=new Uint8Array(ev.target.result);
+          var wb=XLSX.read(data,{type:'array'});
+          var ws=wb.Sheets[wb.SheetNames[0]];
+          var csv=XLSX.utils.sheet_to_csv(ws);
+          var r=BankManager.parseTable(csv,name);
+          showImportResult(r,name);
+        }catch(err){alert('Excel 解析失败：'+err.message);}
+      };
+      reader.readAsArrayBuffer(file);
+    });
+    return;
+  }
+
+  reader.onload=function(ev){
+    var r=BankManager.parseFile(ev.target.result,name);
+    showImportResult(r,name);
+  };
+  reader.readAsText(file,'UTF-8');
+  // 打开弹层显示解析结果
+  openImportModal('file');
+  document.getElementById('imp-file-hint').textContent='已选择：'+name+'（解析中…）';
+}
+
+var sheetJSLoading=false;
+function loadSheetJS(cb){
+  if(typeof XLSX!=='undefined'){cb(true);return;}
+  if(sheetJSLoading){setTimeout(function(){loadSheetJS(cb);},300);return;}
+  sheetJSLoading=true;
+  var s=document.createElement('script');
+  s.src='xlsx.full.min.js';
+  s.onload=function(){sheetJSLoading=false;cb(typeof XLSX!=='undefined');};
+  s.onerror=function(){sheetJSLoading=false;cb(false);};
+  document.head.appendChild(s);
+}
+
+// ---------- 粘贴文本 ----------
+function parsePastedText(){
+  var text=document.getElementById('imp-textarea').value.trim();
+  if(!text){alert('请先粘贴题库文本');return;}
+  // 先试表格，再试纯文本
+  var r=BankManager.parseTable(text,'粘贴题库');
+  if(!r.ok||r.questions.length<2){
+    var r2=BankManager.parsePlainText(text,'粘贴题库');
+    if(r2.ok)r=r2;
+  }
+  showImportResult(r,'粘贴题库');
+}
+
+// ---------- 解析结果预览 ----------
+function showImportResult(r,filename){
+  var pv=document.getElementById('imp-preview');
+  if(!r.ok){
+    pv.innerHTML='<div class="preview-box"><div class="pv-warn">❌ '+esc(r.msg)+'</div></div>';
+    document.getElementById('imp-confirm').disabled=true;
+    pendingImport=null;
+    return;
+  }
+  pendingImport=r;
+  document.getElementById('imp-name').value=r.name||filename.replace(/\.[^.]+$/,'');
+  var sum=BankManager.summarize(r.questions);
+  var html='<div class="preview-box">'+
+    '<div style="font-size:13px;font-weight:600;margin-bottom:8px">✅ 解析成功，请核对后再导入</div>'+
+    '<div class="pv-stat">'+
+      '<span>共 <b>'+sum.total+'</b> 题</span>'+
+      '<span>判断 '+sum.judge+'</span>'+
+      '<span>单选 '+sum.single+'</span>'+
+      '<span>多选 '+sum.multi+'</span>'+
+    '</div>';
+  if(r.skipped)html+='<div class="pv-warn">⚠️ 有 '+r.skipped+' 条数据格式不符被跳过，请检查原题。</div>';
+  html+='<div style="font-size:12px;color:var(--sub);margin:10px 0 4px">前 3 题预览：</div>';
+  r.questions.slice(0,3).forEach(function(q){
+    var ans=q.a;
+    if(q.t!=='judge'&&q.o){
+      ans=q.a.split('').map(function(L){return q.o[L]||L;}).join(' / ');
+    }else{ans=q.a==='√'?'正确':'错误';}
+    html+='<div class="pv-q"><span class="pq-t">['+TYPE_NAME[q.t]+']</span> '+esc(q.q)+
+      '<br><span style="color:var(--ok)">答：'+esc(ans)+'</span></div>';
+  });
+  html+='</div>';
+  pv.innerHTML=html;
+  document.getElementById('imp-confirm').disabled=false;
+  var hint=document.getElementById('imp-file-hint');
+  if(hint)hint.textContent='已解析 '+sum.total+' 题，确认后导入';
+}
+
+// ---------- 确认导入 ----------
+function confirmImport(){
+  if(!pendingImport)return;
+  var name=document.getElementById('imp-name').value.trim()||'导入题库';
+  var r=BankManager.addBank({name:name,desc:pendingImport.desc||'',questions:pendingImport.questions});
+  if(!r.ok){alert(r.msg);return;}
+  // 自动切换到新题库
+  BankManager.setActiveId(r.id);
+  closeImportModal();
+  renderBankList();
+  renderHome();
+  goHome();
+  alert('✅ 导入成功！\n题库「'+name+'」共 '+r.count+' 题，已切换为当前题库。');
+}
+
+// ============ 公共题库加载 ============
+// 管理员把题库放到 banks/ 目录并登记 manifest.json，全员打开链接即可见
+// 加载失败（如本地 file:// 打开）时静默降级，不影响内置与本地导入题库
+function loadPublicBanks(){
+  try{
+    fetch('banks/manifest.json?t='+Date.now(),{cache:'no-store'})
+      .then(function(r){return r.ok?r.json():null;})
+      .then(function(m){
+        if(!m||!Array.isArray(m.banks)||m.banks.length===0)return;
+        var jobs=m.banks.map(function(b){
+          return fetch(b.file+'?t='+Date.now(),{cache:'no-store'})
+            .then(function(r){return r.ok?r.json():null;})
+            .then(function(data){
+              if(!data)return null;
+              var parsed=BankManager.parseBankObject(data,b.name);
+              if(!parsed.ok)return null;
+              return {id:'public_'+(b.id||b.file),name:b.name||parsed.name,
+                      desc:b.desc||parsed.desc||'',source:'public',
+                      count:parsed.questions.length,createdAt:0,questions:parsed.questions};
+            }).catch(function(){return null;});
+        });
+        return Promise.all(jobs);
+      })
+      .then(function(list){
+        if(!list)return;
+        var valid=list.filter(Boolean);
+        if(valid.length===0)return;
+        // 合并到运行时的公共题库表（BankManager 读取此全局）
+        window.PUBLIC_BANKS=valid;
+        try{renderHome();if(document.getElementById('bank-view').style.display==='flex')renderBankList();}catch(e){}
+      })
+      .catch(function(){});
+  }catch(e){}
+}
+
 // ============ 启动 ============
+BankManager.onChange(function(){try{renderHome();}catch(e){}});
 renderHome();
+loadPublicBanks();
 // 暴露给全局
 window.startQuiz=startQuiz;
 window.showMemoryTips=showMemoryTips;
@@ -618,6 +1021,18 @@ window.skipQuestion=skipQuestion;
 window.showWrong=showWrong;
 window.clearWrong=clearWrong;
 window.closeModal=closeModal;
+// 题库管理
+window.showBankManager=showBankManager;
+window.switchBank=switchBank;
+window.doExportBank=doExportBank;
+window.doDeleteBank=doDeleteBank;
+window.downloadTemplate=downloadTemplate;
+window.openImportModal=openImportModal;
+window.closeImportModal=closeImportModal;
+window.switchImportTab=switchImportTab;
+window.handleFileSelect=handleFileSelect;
+window.parsePastedText=parsePastedText;
+window.confirmImport=confirmImport;
 </script>
 </body>
 </html>
