@@ -6,6 +6,7 @@
 <title>制鞋工三级·题库速记</title>
 <script src="questions.js"></script>
 <script src="bank-manager.js"></script>
+<script src="exam.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--main:#7B93A4;--main-d:#617888;--main-l:#D6DEE4;--bg:#F2F5F7;--card:#FFFFFF;--text:#2C3E50;--sub:#7F8C8D;--ok:#52c41a;--err:#e74c3c;--shadow:0 2px 12px rgba(123,147,164,.15);--radius:14px}
@@ -174,6 +175,104 @@ button{border:none;outline:none;font-family:inherit;cursor:pointer}
 .preview-box .pv-warn{color:var(--err);font-size:12px;margin-top:8px}
 .imp-actions{display:flex;gap:10px;margin-top:14px}
 .imp-actions button{flex:1;padding:12px;border-radius:10px;font-size:14px;font-weight:600}
+
+/* ===== 模拟考试 · 首页入口 ===== */
+.exam-entry{width:100%;background:linear-gradient(120deg,#617888,#7B93A4 60%,#8FA6B5);border-radius:var(--radius);
+  padding:16px;display:flex;align-items:center;gap:14px;color:#fff;text-align:left;
+  box-shadow:0 4px 16px rgba(97,120,136,.28);margin-bottom:18px;transition:transform .15s}
+.exam-entry:active{transform:scale(.98)}
+.exam-entry .ee-ic{width:46px;height:46px;border-radius:12px;background:rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.exam-entry .ee-main{flex:1;min-width:0}
+.exam-entry .ee-tt{font-size:16px;font-weight:700;margin-bottom:2px}
+.exam-entry .ee-ds{font-size:11px;opacity:.9}
+.exam-entry .ee-go{font-size:13px;font-weight:600;background:rgba(255,255,255,.2);padding:6px 12px;border-radius:20px;white-space:nowrap}
+.ex-badge{display:inline-block;font-size:10px;background:#e67e22;color:#fff;padding:1px 7px;border-radius:8px;margin-left:6px;vertical-align:middle}
+
+/* ===== 模拟考试 · 配置页 ===== */
+#exam-setup-view,#exam-result-view{display:none;flex:1;flex-direction:column;min-height:100vh;padding:0 16px 32px}
+#exam-view{display:none;flex:1;flex-direction:column;min-height:100vh}
+#exam-review-view{display:none;flex:1;flex-direction:column;min-height:100vh;padding:0 16px 32px}
+.ex-setup{padding-top:14px}
+.ex-card{background:var(--card);border-radius:12px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.ex-h{font-size:13px;font-weight:700;color:var(--main);margin-bottom:10px}
+.ex-bank-info{font-size:13px;color:var(--text);line-height:1.7}
+.ex-seg{display:flex;gap:8px;flex-wrap:wrap}
+.ex-seg button{flex:1;min-width:70px;padding:9px 6px;border-radius:9px;background:var(--bg);color:var(--sub);font-size:13px;font-weight:600}
+.ex-seg button.on{background:var(--main);color:#fff}
+.ex-note{font-size:12px;color:var(--sub);margin-top:10px;line-height:1.6}
+.ex-start{width:100%;padding:14px;border-radius:11px;background:var(--main);color:#fff;font-size:15px;font-weight:700;margin-top:4px}
+.ex-resume{background:#FFF6E8;border:1px solid #F5D9A8;border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.ex-resume-t{font-size:14px;font-weight:700;color:#b9770e;margin-bottom:4px}
+.ex-resume-d{font-size:12px;color:var(--sub);margin-bottom:10px}
+.ex-resume-b{display:flex;gap:8px}
+.ex-resume-b button{flex:1;padding:9px;border-radius:9px;font-size:13px;font-weight:600}
+.ex-h-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--main-l);font-size:12px}
+.ex-h-row:first-of-type{border-top:none}
+.ex-h-date{color:var(--sub);width:78px;flex-shrink:0}
+.ex-h-score{font-weight:700;font-size:14px;min-width:48px}
+.ex-h-score.pass{color:var(--ok)}.ex-h-score.fail{color:var(--err)}
+.ex-h-meta{color:var(--sub);flex:1;text-align:right}
+.ex-h-empty{text-align:center;color:var(--sub);font-size:12px;padding:14px}
+
+/* ===== 模拟考试 · 答题页 ===== */
+.ex-header{background:var(--card);padding:10px 14px;box-shadow:var(--shadow);position:sticky;top:0;z-index:10}
+.ex-hd-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.ex-timer-box{font-size:18px;font-weight:700;color:var(--main);display:flex;align-items:center;gap:5px;font-variant-numeric:tabular-nums}
+.ex-hd-info{flex:1;text-align:right;font-size:11px;color:var(--sub);line-height:1.4}
+.ex-hd-info b{color:var(--main);font-size:12px}
+.ex-hd-btns{display:flex;gap:8px}
+.ex-hd-btns button{flex:1;padding:8px;border-radius:8px;background:var(--bg);color:var(--main);font-size:12px;font-weight:600}
+.ex-hd-btns button.submit{background:var(--main);color:#fff}
+.ex-bar-wrap{height:4px;background:var(--main-l);border-radius:2px;overflow:hidden}
+.ex-bar-wrap .bar{height:100%;background:var(--main);transition:width .25s}
+.ex-multi-hint{font-size:12px;color:var(--sub);margin-top:12px;text-align:center}
+.ex-noanswer{margin-top:18px;background:var(--bg);border-radius:9px;padding:10px 12px;font-size:11px;color:var(--sub);text-align:center}
+#ex-qbody{flex:1;padding:16px;overflow-y:auto}
+.ex-qfooter{background:var(--card);padding:10px 12px;box-shadow:0 -2px 12px rgba(0,0,0,.06);display:flex;gap:8px}
+.ex-qfooter button{flex:1;padding:12px 6px;border-radius:9px;font-size:13px;font-weight:600}
+.ex-qfooter button:disabled{opacity:.4}
+.ex-sheet-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:6px 0 12px;max-height:46vh;overflow-y:auto}
+.ex-cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border-radius:8px;
+  background:var(--bg);color:var(--sub);font-size:13px;font-weight:600;border:1px solid var(--main-l)}
+.ex-cell.done{background:var(--main);color:#fff;border-color:var(--main)}
+.ex-cell.flagged{border:2px solid #e67e22}
+.ex-cell.cur{outline:2px solid var(--main-d);outline-offset:1px}
+.ex-sheet-stat{font-size:12px;color:var(--sub);text-align:center;margin-bottom:10px}
+.ex-sheet-legend{font-size:11px;color:var(--sub);text-align:center;margin-bottom:12px}
+
+/* ===== 模拟考试 · 成绩页 ===== */
+.ex-rs-head{text-align:center;padding:28px 0 12px}
+.ex-rs-label{font-size:13px;color:var(--sub)}
+.ex-rs-head .big-num{font-size:66px;font-weight:800;line-height:1.2}
+.ex-pass{font-size:14px;font-weight:600;padding:6px 16px;border-radius:20px;display:inline-block}
+.ex-pass.pass{background:#f0fff0;color:var(--ok)}
+.ex-pass.fail{background:#fff0f0;color:var(--err)}
+.ex-rs-meta{text-align:center;font-size:13px;color:var(--text);line-height:1.9;margin-bottom:18px}
+.ex-rs-types{background:var(--card);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);margin-bottom:18px}
+.ex-type-row{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:12px}
+.ex-type-name{width:56px;flex-shrink:0;color:var(--sub)}
+.ex-type-bar{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
+.ex-type-bar div{height:100%;background:var(--main);border-radius:4px}
+.ex-type-num{width:44px;text-align:right;font-weight:600;flex-shrink:0}
+
+/* ===== 模拟考试 · 逐题回顾 ===== */
+.ex-rv-item{background:var(--card);border-radius:12px;padding:14px 16px;margin-bottom:10px;
+  box-shadow:var(--shadow);border-left:4px solid var(--main-l)}
+.ex-rv-item.ok{border-left-color:var(--ok)}
+.ex-rv-item.bad{border-left-color:var(--err)}
+.ex-rv-item.half{border-left-color:#e67e22}
+.ex-rv-h{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);margin-bottom:6px}
+.ex-rv-badge{font-weight:700}
+.ex-rv-item.ok .ex-rv-badge{color:var(--ok)}
+.ex-rv-item.bad .ex-rv-badge{color:var(--err)}
+.ex-rv-item.half .ex-rv-badge{color:#e67e22}
+.ex-rv-q{font-size:14px;line-height:1.6;margin-bottom:8px}
+.ex-rv-opts{font-size:12px;color:var(--sub);line-height:1.8;margin-bottom:8px}
+.ex-rv-opt.right{color:var(--ok);font-weight:600}
+.ex-rv-ans{font-size:12px;background:var(--bg);border-radius:8px;padding:8px 10px;line-height:1.8}
+.ex-rv-ans b{color:var(--main)}
+.ex-rv-item .tip{font-size:12px;color:var(--text);background:var(--bg);padding:8px 10px;border-radius:8px;margin-top:8px}
 </style>
 </head>
 <body>
@@ -202,6 +301,16 @@ button{border:none;outline:none;font-family:inherit;cursor:pointer}
     <div class="si"><div class="num" id="stat-acc">--</div><div class="lbl">正确率</div></div>
     <div class="si"><div class="num" id="stat-wrong">0</div><div class="lbl">错题数</div></div>
   </div>
+
+  <div class="section-title">🎓 全真模拟</div>
+  <button class="exam-entry" onclick="openExamSetup()">
+    <div class="ee-ic">📋</div>
+    <div class="ee-main">
+      <div class="ee-tt">模拟考试<span id="exam-entry-badge"></span></div>
+      <div class="ee-ds">随机组卷 · 计时交卷 · 自动判分 · 逐题回顾</div>
+    </div>
+    <div class="ee-go">开始 ›</div>
+  </button>
 
   <div class="section-title">🚀 刷题模式</div>
   <div class="mode-grid">
@@ -321,6 +430,111 @@ button{border:none;outline:none;font-family:inherit;cursor:pointer}
   </div>
 </div>
 
+<!-- ========== 模拟考试 · 配置 ========== -->
+<div id="exam-setup-view">
+  <div class="qheader" style="border-radius:0 0 14px 14px">
+    <button class="back" onclick="goHome()">‹</button>
+    <div style="flex:1;text-align:center;font-weight:600">模拟考试设置</div>
+    <div style="width:30px"></div>
+  </div>
+  <div class="ex-setup">
+    <div class="ex-card"><div class="ex-h">当前题库</div><div class="ex-bank-info" id="ex-bank-info"></div></div>
+    <div id="ex-resume-box"></div>
+    <div class="ex-card">
+      <div class="ex-h">组卷题量</div>
+      <div class="ex-seg" id="ex-count-seg">
+        <button data-v="50">50 题</button>
+        <button data-v="100" class="on">100 题</button>
+        <button data-v="0">全部</button>
+      </div>
+      <div class="ex-note" id="ex-count-note"></div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-h">考试时长</div>
+      <div class="ex-seg" id="ex-time-seg">
+        <button data-v="30">30 分钟</button>
+        <button data-v="60" class="on">60 分钟</button>
+        <button data-v="90">90 分钟</button>
+        <button data-v="180">180 分钟</button>
+      </div>
+      <div class="ex-note">时间到自动交卷。中途退出可回到本页点「继续考试」恢复，计时不暂停。</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-h">多选题计分</div>
+      <div class="ex-seg" id="ex-rule-seg">
+        <button data-v="strict" class="on">严格</button>
+        <button data-v="loose">宽松</button>
+      </div>
+      <div class="ex-note">严格：漏选或错选均不得分（贴近正式考试）。宽松：只漏选未错选得一半分。</div>
+    </div>
+    <div id="ex-history"></div>
+    <button class="ex-start" onclick="exStartFromSetup()">开始考试</button>
+  </div>
+</div>
+
+<!-- ========== 模拟考试 · 答题 ========== -->
+<div id="exam-view">
+  <div class="ex-header">
+    <div class="ex-hd-top">
+      <div class="ex-timer-box">⏱ <span id="ex-timer">60:00</span></div>
+      <div class="ex-hd-info"><b id="ex-prog">第 1 / 100 题</b><br><span id="ex-answered">已答 0/100</span></div>
+    </div>
+    <div class="ex-bar-wrap"><div class="bar" id="ex-bar" style="width:0%"></div></div>
+    <div class="ex-hd-btns" style="margin-top:8px">
+      <button onclick="exExitExam()">暂存退出</button>
+      <button onclick="exToggleSheet()">答题卡</button>
+      <button class="submit" onclick="exConfirmSubmit()">交卷</button>
+    </div>
+  </div>
+  <div class="qbody" id="ex-qbody"></div>
+  <div class="ex-qfooter">
+    <button class="btn-ghost" id="ex-prev-btn" onclick="exPrev()">上一题</button>
+    <button class="btn-ghost" id="ex-flag-btn" onclick="exToggleFlag()">☆ 标记</button>
+    <button class="btn-main" id="ex-next-btn" onclick="exNext()">下一题</button>
+  </div>
+  <div class="modal-mask" id="ex-sheet-mask">
+    <div class="modal">
+      <h2>答题卡</h2>
+      <div class="ex-sheet-stat" id="ex-sheet-stat"></div>
+      <div class="ex-sheet-grid" id="ex-sheet-grid"></div>
+      <div class="ex-sheet-legend">蓝色 = 已答 · 橙框 = 标记 · 点击题号跳转</div>
+      <button class="close-btn" onclick="exToggleSheet(true)">继续答题</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 模拟考试 · 成绩 ========== -->
+<div id="exam-result-view">
+  <div class="qheader" style="border-radius:0 0 14px 14px">
+    <button class="back" onclick="goHome()">‹</button>
+    <div style="flex:1;text-align:center;font-weight:600">考试成绩</div>
+    <div style="width:30px"></div>
+  </div>
+  <div class="ex-rs-head">
+    <div class="ex-rs-label">本次成绩</div>
+    <div class="big-num" id="ex-score">0</div>
+    <div id="ex-pass" class="ex-pass"></div>
+  </div>
+  <div class="ex-rs-meta" id="ex-rs-meta"></div>
+  <div class="ex-rs-types" id="ex-rs-types"></div>
+  <div class="rs-actions" style="margin:0 auto">
+    <button class="btn-main" onclick="exShowReview()">逐题回顾</button>
+    <button class="btn-ghost" onclick="exRetryWrong()">只练错题</button>
+    <button class="btn-ghost" onclick="exBackToSetup()">再考一次</button>
+    <button class="btn-ghost" onclick="goHome()">返回首页</button>
+  </div>
+</div>
+
+<!-- ========== 模拟考试 · 逐题回顾 ========== -->
+<div id="exam-review-view">
+  <div class="qheader" style="border-radius:0 0 14px 14px">
+    <button class="back" onclick="exBackToResult()">‹</button>
+    <div style="flex:1;text-align:center;font-weight:600">逐题回顾</div>
+    <div style="width:30px"></div>
+  </div>
+  <div id="ex-review-list" style="padding-top:12px"></div>
+</div>
+
 </div>
 
 <!-- 记忆法弹层 -->
@@ -422,6 +636,10 @@ function renderHome(){
       '<div class="mc">'+mods[m]+'题</div></div>';
   });
   document.getElementById('module-list').innerHTML=html;
+
+  // 首页模拟考试入口：有未完成考试时显示角标
+  var eb=document.getElementById('exam-entry-badge');
+  if(eb&&typeof exEntryBadge==='function')eb.innerHTML=exEntryBadge();
 }
 
 // ============ 开始刷题 ============
@@ -456,15 +674,18 @@ function exitQuiz(){
   document.getElementById('quiz-view').style.display='none';
   document.getElementById('quiz-view').classList.add('hidden');
   document.getElementById('home-view').classList.remove('hidden');
+  document.getElementById('home-view').style.display='block';
   renderHome();
 }
 
 function goHome(){
   state.view='home';
-  document.getElementById('result-view').style.display='none';
-  document.getElementById('wrong-view').style.display='none';
-  document.getElementById('bank-view').style.display='none';
+  ['result-view','wrong-view','bank-view','exam-setup-view','exam-view','exam-result-view','exam-review-view'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el){el.style.display='none';el.classList.remove('hidden');}
+  });
   document.getElementById('home-view').classList.remove('hidden');
+  document.getElementById('home-view').style.display='block';
   renderHome();
 }
 
